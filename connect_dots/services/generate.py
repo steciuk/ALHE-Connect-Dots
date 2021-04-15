@@ -1,5 +1,6 @@
 import numpy as np
 from config import gain_func
+from utils.sorts import sort_array_by_gain_asc
 
 
 def generate(n, d=2, low=-1, high=1):
@@ -15,7 +16,7 @@ def generate(n, d=2, low=-1, high=1):
     for point in points:
         point[d] = gain_func(point)
 
-    return points
+    return sort_array_by_gain_asc(points)
 
 
 if __name__ == '__main__':

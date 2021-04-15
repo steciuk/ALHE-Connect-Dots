@@ -6,3 +6,4 @@ def gain_func(point):
 
     return q
 
+PLOT_RES = 100
