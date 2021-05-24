@@ -34,9 +34,9 @@ def _calc_mid_point_median(points):
 
 # for testing
 if __name__ == '__main__':
-    calc_mid_points(np.array([
+    print(calc_mid_points(np.array([
         [100, 1, 1],
         [2, 2, 100],
         [0, 100, 15],
         [2, 6, 100]
-    ]))
+    ])))
