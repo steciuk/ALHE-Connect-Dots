@@ -10,5 +10,4 @@ def gain_func(point):
     return q
 
 
-MAXIMUM = [0, 0]
 PLOT_RES = 100
