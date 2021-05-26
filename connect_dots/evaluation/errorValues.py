@@ -44,10 +44,7 @@ def calcDistance(lin, point, score):
     p1.append(lin[-1] + s1)
     p2.append(lin[-1] + s2)
     newPoint = list(point)
-    s = 0
-    for i in range(len(lin)-1):
-      s += lin[i] * point[i]
-    newPoint.append(s)
+    newPoint.append(score)
     return distance_ND(line=np.transpose([p2]), pts=np.array([newPoint]), l0=np.transpose([p1]))
     """
     return -1
