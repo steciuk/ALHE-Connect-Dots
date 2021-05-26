@@ -1,7 +1,7 @@
 import argh
 from utils.file_menager import csv_to_array
 from services.calc_mid_points import calc_mid_points
-from utils.plotter import plot2d, simplePlot #dodalem simplePlot
+from utils.plotter import plot2d, simplePlot  # dodalem simplePlot
 from utils.max_approx import approx_maximum
 
 ##########dodane
@@ -9,6 +9,8 @@ import evaluation.errorValues
 import evaluation.regression
 from config import gain_func
 import numpy as np
+
+
 ##########
 
 def run(file_path):
@@ -19,7 +21,7 @@ def run(file_path):
 
     mid_points = calc_mid_points(p0)
 
-###########
+    ###########
     mid_points_scores = []
     distance_list = []
     error_list = []
@@ -29,13 +31,13 @@ def run(file_path):
         lin_reg = evaluation.regression.calc_regression(mid_points[:i], mid_points_scores[:i])
         line = lin_reg.coef_.tolist()
         line.append(lin_reg.intercept_)
-        distance_list.append( evaluation.errorValues.distance2D(line, maximum, lin_reg.predice(np.array(maximum))) )
-        error_list.append( evaluation.errorValues.calcError(line, maximum, lin_reg.predice(np.array(maximum))) )
+        distance_list.append(evaluation.errorValues.distance2D(line, maximum, lin_reg.predict(np.array([maximum]))))
+        error_list.append(evaluation.errorValues.calcError(line, maximum, lin_reg.predice(np.array([maximum]))))
 
     simplePlot(distance_list, pltTitle="Odleglosci od prostej wyznaczonej przez regresje")
     simplePlot(distance_list, pltTitle="Blad bezwgledny predykcji w maximum globalnym")
-###########
-        
+    ###########
+
     plot2d(p0, mid_points)
 
 
