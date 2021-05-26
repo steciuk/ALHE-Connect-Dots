@@ -1,17 +1,17 @@
-import argh
+# import argh
 from utils.file_menager import csv_to_array
 from services.calc_mid_points import calc_mid_points
 from utils.plotter import plot2d, simplePlot  # dodalem simplePlot
 from utils.max_approx import approx_maximum
 
-##########dodane
+# dodane
 import evaluation.errorValues
 import evaluation.regression
 from config import gain_func
 import numpy as np
 
 
-##########
+#
 
 def run(file_path):
     p0 = csv_to_array(file_path)  # read points and their gain
@@ -31,11 +31,11 @@ def run(file_path):
         lin_reg = evaluation.regression.calc_regression(mid_points[:i], mid_points_scores[:i])
         line = lin_reg.coef_.tolist()
         line.append(lin_reg.intercept_)
-        distance_list.append(evaluation.errorValues.distance2D(line, maximum, lin_reg.predict(np.array([maximum]))))
-        error_list.append(evaluation.errorValues.calcError(line, maximum, lin_reg.predice(np.array([maximum]))))
+        distance_list.append(evaluation.errorValues.distance_2d(line, maximum, lin_reg.predict(np.array([maximum]))[0]))
+        error_list.append(evaluation.errorValues.calc_error(line, maximum, gain_func(maximum)))
 
     simplePlot(distance_list, pltTitle="Odleglosci od prostej wyznaczonej przez regresje")
-    simplePlot(distance_list, pltTitle="Blad bezwgledny predykcji w maximum globalnym")
+    simplePlot(error_list, pltTitle="Blad bezwgledny predykcji w maximum globalnym")
     ###########
 
     plot2d(p0, mid_points)
@@ -43,4 +43,5 @@ def run(file_path):
 
 if __name__ == '__main__':
     # argh.dispatch_command(run)
-    run('files/test.csv')  # for testing
+    run('files\\test.csv')  # for testing
+    # pass

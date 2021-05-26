@@ -5,9 +5,10 @@ from sklearn.linear_model import LinearRegression
 
 
 def calc_regression(midpoints, scores=None):  # oblicza regresje dla ostatniego parametru lub dla wyników, jeśli podane
+    midpoints = np.array(midpoints).tolist()
     if scores is not None:
         for i in range(len(midpoints)):
-            np.append(midpoints[i], scores[i])
+            midpoints[i].append(scores[i])
     df = pd.DataFrame(midpoints)
     X = df.iloc[:, :-1]  # wyciaga wartosci, na podstawie ktorych jest estymacja
     Y = df.iloc[:, -1]  # wyciaga wartosci, do ktorych chce sie dopacowac

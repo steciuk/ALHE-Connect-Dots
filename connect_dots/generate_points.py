@@ -10,4 +10,4 @@ def run(file_path, n, d=2, low=-1, high=1):
 
 if __name__ == '__main__':
     # argh.dispatch_command(run)
-    run('files/test.csv', 100)  # for testing
+    run('files\\test.csv', 100)  # for testing
