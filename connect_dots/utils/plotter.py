@@ -32,6 +32,13 @@ def plot2d(points, mid_points=None):
     plt.grid(False)
     plt.show()
 
+def simplePlot(values, legend=None, pltTitle=None):
+    plt.plot(values, label=legend)
+    plt.title(pltTitle)
+    if legend:
+        plt.legend()
+    plt.show()
+
 
 # for testing
 if __name__ == '__main__':
