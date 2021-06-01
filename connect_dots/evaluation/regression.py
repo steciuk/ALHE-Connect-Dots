@@ -4,7 +4,12 @@ import sympy
 from sklearn.linear_model import LinearRegression
 
 
-def calc_regression(midpoints, scores=None):  # oblicza regresje dla ostatniego parametru lub dla wyników, jeśli podane
+def calc_regression(midpoints, scores=None, trans=False):  # oblicza regresje dla ostatniego parametru lub dla wyników, jeśli podane
+    if trans and scores is not None:
+        midpoints = np.array(midpoints).transpose()
+        scores = np.array(scores).transpose()
+        return LinearRegression().fit(midpoints, scores)
+
     midpoints = np.array(midpoints).tolist()
     if scores is not None:
         for i in range(len(midpoints)):
