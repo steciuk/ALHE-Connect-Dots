@@ -1,7 +1,8 @@
-argh==0.26.2
-numpy==1.18.4
-matplotlib==3.2.1
+numpy
+matplotlib
 scipy
+pandas
 sympy
 sklearn
-pandas
+scikit-learn
+argh

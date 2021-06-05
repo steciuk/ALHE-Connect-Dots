@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def gain_func(point):
     """
     Define gain function here
