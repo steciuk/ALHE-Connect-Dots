@@ -1,5 +1,5 @@
 import argh
-from utils.file_menager import csv_to_array
+from utils.file_menager import csv_to_array, clear_dir
 from services.calc_mid_points import calc_mid_points
 from utils.plotter import plot2d, simplePlot  # dodalem simplePlot
 from utils.max_approx import approx_maximum
@@ -17,12 +17,11 @@ def run(file_name):
     :param file_name: name of the '.csv' (without extension name) file in './data' directory containing points coords and gain function values
     """
     p0 = csv_to_array(file_name)  # read points and their gain
-
     dim = p0.shape[1] - 1
     maximum = approx_maximum(dim)  # search for maximum approx
-    print("m", maximum)
-
     mid_points = calc_mid_points(p0)
+    clear_dir('plots')
+
 
     ###########
     mid_points_scores = []
@@ -62,14 +61,14 @@ def run(file_name):
         pred_dist = []
         for m in range(len(predict_list[0])):
             pred_dist.append(np.abs(predict_list[d, m] - maximum[d]))
-        simplePlot(pred_dist, pltTitle="Odleglosc od optimum w wymiarze " + str(d+1) + " (regresja po % odrzuconych)", pltName='pred_dist')
+        simplePlot(pred_dist, pltTitle="Odleglosc od optimum w wymiarze " + str(d+1) + " (regresja po % odrzuconych)", pltName='pred_dist_in_dim' + str(d))
 
     mean_predict_list = np.array(mean_predict_list)
     for d in range(dim):
         mean_dist = []
         for m in range(len(mean_predict_list[0])):
             mean_dist.append(np.abs(mean_predict_list[d, m] - maximum[d]))
-        simplePlot(mean_dist, pltTitle="Odleglosc od optimum w wymiarze " + str(d+1) + " (usrednienie midpointow)", pltName='mean_dist')
+        simplePlot(mean_dist, pltTitle="Odleglosc od optimum w wymiarze " + str(d+1) + " (usrednienie midpointow)", pltName='mean_dist_in_dim' + str(d))
     # print(found_list)
 
     print(optimum)
