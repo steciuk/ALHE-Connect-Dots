@@ -1,7 +1,9 @@
+import os
 import matplotlib.pyplot as plt
 import numpy as np
 from config import gain_func
 from config import PLOT_RES
+from utils.file_menager import save_plot
 
 
 def plot2d(points, mid_points=None):
@@ -19,7 +21,8 @@ def plot2d(points, mid_points=None):
     p = np.arange(y_min, y_max + res_y, res_y)
     x, y = np.meshgrid(m, p)
     z = gain_func([x, y])
-    plt.pcolormesh(x, y, z, cmap='viridis', alpha=1)
+    plt.figure()
+    plt.pcolormesh(x, y, z, cmap='viridis', alpha=1, shading='auto')
     plt.colorbar()
 
     # plot used points
@@ -30,7 +33,16 @@ def plot2d(points, mid_points=None):
 
     plt.margins(0)
     plt.grid(False)
-    plt.show()
+    save_plot('points_map', plt)
+
+
+def simplePlot(values, legend=None, pltTitle=None, pltName='plot'):
+    plt.figure()
+    plt.plot(values, label=legend)
+    plt.title(pltTitle)
+    if legend:
+        plt.legend()
+    save_plot(pltName, plt)
 
 
 # for testing
