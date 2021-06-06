@@ -12,9 +12,8 @@
 
 W ten sposób mamy zdefiniowany ciąg punktów `ci` który przetwarzamy w następujący sposób:  
 Dla każdej współrzędnej punktów `ci` analizujemy jej ciąg wartości. Propozycja na dziś jest taka, że konstruujemy funkcję `ci(i)`, robimy regresję liniową względem i, po czym odczytujemy wartość `ci(Nd)`. Wartość tę traktujemy jako estymator położenia optimum lokalnego. 
-Otrzymane punkty środkowe wykorzystywane są do wyliczenia regresji liniowych, dla każdego wymiaru oddzielnie.
+Otrzymane punkty środkowe wykorzystujemy do wyliczenia regresji liniowych, dla każdego wymiaru oddzielnie.
 Regresje przewidują wartość współrzędnej od procenta niewykorzystanych punktów środkowych.
-Obliczone regresje służą do predykcji optimum.
 Przewidywana wartość danej współrzędnej optimum jest równa wartości wyrazu wolnego regresji liniowej, w tym wymiarze.
 W sytuacji, gdy procent niewykorzystanych punktów wynosi 0, wartość predykcji jest równa wartości wyrazu wolnego regresji. 
 
