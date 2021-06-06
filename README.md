@@ -12,6 +12,11 @@
 
 W ten sposób mamy zdefiniowany ciąg punktów `ci` który przetwarzamy w następujący sposób:  
 Dla każdej współrzędnej punktów `ci` analizujemy jej ciąg wartości. Propozycja na dziś jest taka, że konstruujemy funkcję `ci(i)`, robimy regresję liniową względem i, po czym odczytujemy wartość `ci(Nd)`. Wartość tę traktujemy jako estymator położenia optimum lokalnego. 
+Otrzymane punkty środkowe wykorzystywane są do wyliczenia regresji liniowych, dla każdego wymiaru oddzielnie.
+Regresje przewidują wartość współrzędnej od procenta niewykorzystanych punktów środkowych.
+Obliczone regresje służą do predykcji optimum.
+Przewidywana wartość danej współrzędnej optimum jest równa wartości wyrazu wolnego regresji liniowej, w tym wymiarze.
+W sytuacji, gdy procent niewykorzystanych punktów wynosi 0, wartość predykcji jest równa wartości wyrazu wolnego regresji. 
 
 ### Przed uruchomieniem
 1. Przejdź do folderu projektu
@@ -36,8 +41,9 @@ Aby dowiedzieć się o użyciu modułu generującego punkty użyj komendy:
 
 ### Connect-dots
 Wczytuje informacje o punktach z pliku `file-name.csv` z katalogu `./data`  
-Oblicza punkty środkowe zbioru wczytanych punktów powstałe w wyniku iteracyjnego odrzucania punktu o najniższej wartości funkcji celu.  
-!!! TU OPISZ CO SIĘ DALEJ DZIEJE  
+Oblicza punkty środkowe zbioru wczytanych punktów powstałe w wyniku iteracyjnego odrzucania punktu o najniższej wartości funkcji celu.
+Przewiduje pozycję optimum przy użyciu regresji liniowej oraz przy użyciu uśredniania punktów środkowych.
+Rysuje wykresy, przedstawiające błąd predykcji.
 Wszystkie wygenerowane wykresy zapisywane są do folderu `./plots`  
 #### Użycie:
  `python3 connect_dots.py file-name`
