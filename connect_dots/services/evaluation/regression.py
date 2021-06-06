@@ -4,7 +4,13 @@ import sympy
 from sklearn.linear_model import LinearRegression
 
 
-def calc_regression(midpoints, scores=None, trans=False):  # oblicza regresje dla ostatniego parametru lub dla wyników, jeśli podane
+def calc_regression(midpoints, scores=None, trans=False):
+    """
+    Calculates regression for last coordinate or score (if given)
+    :param midpoints: list of points
+    :param scores: values of gain function for each point
+    :param trans: True if list of points and list of scores require transposition
+    """
     if trans and scores is not None:
         midpoints = np.array(midpoints).transpose()
         scores = np.array(scores).transpose()
@@ -15,16 +21,20 @@ def calc_regression(midpoints, scores=None, trans=False):  # oblicza regresje dl
         for i in range(len(midpoints)):
             midpoints[i].append(scores[i])
     df = pd.DataFrame(midpoints)
-    X = df.iloc[:, :-1]  # wyciaga wartosci, na podstawie ktorych jest estymacja
-    Y = df.iloc[:, -1]  # wyciaga wartosci, do ktorych chce sie dopacowac
+    x = df.iloc[:, :-1]  # wyciaga wartosci, na podstawie ktorych jest estymacja
+    y = df.iloc[:, -1]  # wyciaga wartosci, do ktorych chce sie dopacowac
     lin_reg = LinearRegression()
-    lin_reg.fit(X, Y)
+    lin_reg.fit(x, y)
     return lin_reg  # zwraca klase LinearRegression()
 
     # return (lin_reg.coef_).tolist(), lin_reg.intercept_  #zwraca parametry regresji liniowej oraz bazową warość
 
 
-def prep_for_sympy(poly):  # bierze wielomian jako tablice wspolczynnikow i przerabia na forme uzyteczna dla sympy
+def prep_for_sympy(poly):
+    """
+    Returns the polynomial in text format, which than can by used by sympy.solve()
+    :param poly: polynomial represented by a list of factors
+    """
     s = ""
     stopien = len(poly) - 1
     for p in poly:
@@ -37,13 +47,16 @@ def prep_for_sympy(poly):  # bierze wielomian jako tablice wspolczynnikow i prze
     return s
 
 
-def calc_der_for_each(midpoints, scores):  # liczy pochodna dla kazdego parametru osobno
+def calc_der_for_each(midpoints):
+    """
+    Calculates derivative for each coordinate separately
+    :param midpoints: list of points
+    """
     df = pd.DataFrame(midpoints)
     sz = df.shape[1] - 1
     ders = []
     for i in range(df.shape[1] - 1):
-        f = np.polyfit(df[i].tolist(), df[sz].tolist(),
-                       3).tolist()  # funkcja 3-ego stopnia, colab poleca funkcje nizszego stopnia
+        f = np.polyfit(df[i].tolist(), df[sz].tolist(), 3).tolist()  # third degree function
         f.reverse()
         for j in range(len(f) - 1):  # liczenie pochodnej
             f[j] = f[j + 1] * (j + 1)
@@ -54,14 +67,22 @@ def calc_der_for_each(midpoints, scores):  # liczy pochodna dla kazdego parametr
 
 
 def find_solutions(derivatives):  # dla kazdego parametru osobno znajduje maksima lokalne
+    """
+    Finds local maximums for each derivative
+    Every derivative should be represented as a list of factors
+    Returns a list of lists
+    Each list contains maximums for each derivative
+    :param derivatives: list of derivatives
+    """
     solutions = []
     for d in derivatives:
         solu = sympy.solve(prep_for_sympy(d))
         saved_solu = []
-        ##sprawdzenie, czy mamy do czynienia z maks czy min lokalnym
+
+        # check if maximum or minimum
         dd = d
         dd.reverse()
-        for j in range(len(dd) - 1):  # liczenie drugiej pochodnej
+        for j in range(len(dd) - 1):  # calculate second derivative
             dd[j] = dd[j + 1] * (j + 1)
         dd.pop()
         dd.reverse()
@@ -70,36 +91,50 @@ def find_solutions(derivatives):  # dla kazdego parametru osobno znajduje maksim
             for x in dd:
                 val *= s
                 val += x
-            if sympy.sympify(val).is_real and val < 0:  # a wiec z maks lokalne
+            if sympy.sympify(val).is_real and val < 0:  # maximum
                 saved_solu.append(s)
         solutions.append(saved_solu)
-    return solutions  # tablica tablic maksimow lokalnych
+    return solutions
 
 
 ###Funkcje poniżej robia predykcje współrzędnej punktu - być może zaszłaby taka potrzeba, gdyby jakichś danych brakowało
 
-def calc_reg_for_each(midpoints):  # robi regresje dla kazdego parametru oddzielnie
+def calc_reg_for_each(midpoints):
+    """
+    Calculates regression for each parameter separately
+    Returns list of lists
+    Each list contains coefficients and intercept of each regression
+    :param midpoints: list of points
+    """
     params = []
     df = pd.DataFrame(midpoints)
     for i in range(len(midpoints[0])):
-        X = Y = []
+        x = []
+        y = []
         if i != len(midpoints[0]) - 1:
-            X1 = df.iloc[:, :i]
-            X2 = df.iloc[:, i + 1:]
-            X = pd.concat([X1, X2], axis=1)
-            Y = df.iloc[:, i]  # wyciaga wartosci, do ktorych chce sie dopacowac
+            x1 = df.iloc[:, :i]
+            x2 = df.iloc[:, i + 1:]
+            x = pd.concat([x1, x2], axis=1)
+            y = df.iloc[:, i]  # wyciaga wartosci, do ktorych chce sie dopacowac
         else:
-            X = df.iloc[:, :-1]
-            Y = df.iloc[:, -1]
+            x = df.iloc[:, :-1]
+            y = df.iloc[:, -1]
         lin_reg = LinearRegression()
-        lin_reg.fit(X, Y)
-        tab = (lin_reg.coef_).tolist()
+        lin_reg.fit(x, y)
+        tab = lin_reg.coef_.tolist()
         tab.append(lin_reg.intercept_)
         params.append(tab)
     return params
 
 
-def predict_each(point, params):  # oblicza predykcje kazdego parametru oddzielnie i zwraca wektor predykcji
+def predict_each(point, params):
+    """
+    Calculates prediction based on linear regressions given as a list
+    Last field of every list should contain intercept
+    Returns a list of predictions - one for every linear regression
+    :param point: point, which will be used in predicting values
+    :param params: list of linear regressions
+    """
     predicted = []
     for i in range(len(params)):
         index = 0
@@ -120,7 +155,7 @@ if __name__ == '__main__':
     wyniki = [24, 3, 5, 8]
     para = calc_reg_for_each(m)
     para_with_scores = calc_regression(m, wyniki)
-    deriv = calc_der_for_each(m, wyniki)
+    deriv = calc_der_for_each(m)
     solucje = find_solutions(deriv)
 
     print(para_with_scores.coef_, para_with_scores.intercept_)

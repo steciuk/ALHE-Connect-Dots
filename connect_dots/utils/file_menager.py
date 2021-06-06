@@ -1,6 +1,7 @@
+from glob import glob
 import numpy as np
 from os.path import join, exists
-from os import makedirs
+from os import makedirs, remove
 from definitions import ROOT_DIR
 
 
@@ -21,3 +22,10 @@ def save_plot(file_name, plt):
     if not exists(path):
         makedirs(path)
     plt.savefig(join(path, file_name + '.png'))
+
+
+def clear_dir(dir):
+    path = join(ROOT_DIR, dir, '*')
+    files = glob(path)
+    for f in files:
+        remove(f)
