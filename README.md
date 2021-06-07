@@ -15,7 +15,10 @@ Dla każdej współrzędnej punktów `ci` analizujemy jej ciąg wartości. Propo
 Otrzymane punkty środkowe wykorzystujemy do wyliczenia regresji liniowych, dla każdego wymiaru oddzielnie.
 Regresje przewidują wartość współrzędnej od procenta niewykorzystanych punktów środkowych.
 Przewidywana wartość danej współrzędnej optimum jest równa wartości wyrazu wolnego regresji liniowej, w tym wymiarze.
-W sytuacji, gdy procent niewykorzystanych punktów wynosi 0, wartość predykcji jest równa wartości wyrazu wolnego regresji. 
+W sytuacji, gdy procent niewykorzystanych punktów wynosi 0, wartość predykcji jest równa wartości wyrazu wolnego regresji. <br>
+Na potrzeby ewaluacji algorytmu, przeprowadzaliśmy oddzielną estymację optimum poprzez obliczenie średniej arytmetycznej punktów środkowych.
+Co jest równoważne policzeniu regresji liniowej bez uzależnienia od jakiejkolwiek zmiennej.
+Taki zabieg pozwala na ocenę, na ile sensowne jest wykorzystywanie procenta niewykorzystanych punktów do predykcji optimum.
 
 ### Przed uruchomieniem
 1. Przejdź do folderu projektu

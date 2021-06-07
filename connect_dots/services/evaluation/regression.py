@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 def calc_regression(midpoints, scores=None, trans=False):
     """
     Calculates regression for last coordinate or score (if given)
+    Returns an object of class LinearRegression()
     :param midpoints: list of points
     :param scores: values of gain function for each point
     :param trans: True if list of points and list of scores require transposition
@@ -21,11 +22,11 @@ def calc_regression(midpoints, scores=None, trans=False):
         for i in range(len(midpoints)):
             midpoints[i].append(scores[i])
     df = pd.DataFrame(midpoints)
-    x = df.iloc[:, :-1]  # wyciaga wartosci, na podstawie ktorych jest estymacja
-    y = df.iloc[:, -1]  # wyciaga wartosci, do ktorych chce sie dopacowac
+    x = df.iloc[:, :-1]  # takes values for further estimations
+    y = df.iloc[:, -1]  # takes values to fit to
     lin_reg = LinearRegression()
     lin_reg.fit(x, y)
-    return lin_reg  # zwraca klase LinearRegression()
+    return lin_reg
 
     # return (lin_reg.coef_).tolist(), lin_reg.intercept_  #zwraca parametry regresji liniowej oraz bazową warość
 
@@ -58,7 +59,7 @@ def calc_der_for_each(midpoints):
     for i in range(df.shape[1] - 1):
         f = np.polyfit(df[i].tolist(), df[sz].tolist(), 3).tolist()  # third degree function
         f.reverse()
-        for j in range(len(f) - 1):  # liczenie pochodnej
+        for j in range(len(f) - 1):  # calculate simple derivative
             f[j] = f[j + 1] * (j + 1)
         f.pop()
         f.reverse()
@@ -66,7 +67,7 @@ def calc_der_for_each(midpoints):
     return ders
 
 
-def find_solutions(derivatives):  # dla kazdego parametru osobno znajduje maksima lokalne
+def find_solutions(derivatives):
     """
     Finds local maximums for each derivative
     Every derivative should be represented as a list of factors
@@ -115,7 +116,7 @@ def calc_reg_for_each(midpoints):
             x1 = df.iloc[:, :i]
             x2 = df.iloc[:, i + 1:]
             x = pd.concat([x1, x2], axis=1)
-            y = df.iloc[:, i]  # wyciaga wartosci, do ktorych chce sie dopacowac
+            y = df.iloc[:, i]  # takes values to fit to
         else:
             x = df.iloc[:, :-1]
             y = df.iloc[:, -1]

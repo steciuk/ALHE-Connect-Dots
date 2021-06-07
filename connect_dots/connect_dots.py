@@ -8,7 +8,7 @@ import services.evaluation.error_values
 import services.evaluation.regression
 import services.evaluation.distance
 import services.evaluation.regression_old
-import services.evaluation.regression_arabas
+import services.evaluation.regression_new
 from config import gain_func
 import numpy as np
 
@@ -25,8 +25,8 @@ def run(file_name):
     clear_dir('plots')
 
     services.evaluation.regression_old.regression_by_gain_func(mid_points, maximum)
-    services.evaluation.regression_arabas.regression_correct(mid_points, maximum, dim)
-    services.evaluation.regression_arabas.mean_correct(mid_points, maximum, dim)
+    services.evaluation.regression_new.regression_correct(mid_points, maximum, dim)
+    services.evaluation.regression_new.mean_correct(mid_points, maximum, dim)
 
     if(p0.shape[1]) == 3:
         plot2d(p0, mid_points)
