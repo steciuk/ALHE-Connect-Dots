@@ -3,7 +3,7 @@ from services.generate import generate
 from utils.file_menager import array_to_csv
 
 
-def run(file_name, n=100, d=2, bottom=-1, top=1):
+def run(file_name, n=100, d=2, bottom=-1.0, top=1.0):
     """
     Generate n d-dimensional points with U[bottom, top] distribution of coordinates
     Calculates gain value for each of them
