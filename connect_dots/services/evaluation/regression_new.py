@@ -17,7 +17,7 @@ def regression_correct(mid_points, maximum, dim, plot_for_each=True):
     optimum = []
     predict_list = []  # list of predicted values for each dim, in every iteration
     if dim > 7:
-        plot_for_each=False
+        plot_for_each = False
 
     for d in range(dim):
         percentages = [1]
@@ -53,11 +53,12 @@ def mean_correct(mid_points, maximum, dim, plot_for_each=True):
     :param mid_points: list of points
     :param maximum: true optimum, parameter used for evaluation of the prediction
     :param dim: number of dimensions
+    :param plot_for_each: True if draw plot for every dimension, False if draw only one main plot
     """
     optimum = []
     mean_predict_list = []  # list of predicted values for each dim, in every iteration
     if dim > 7:
-        plot_for_each=False
+        plot_for_each = False
 
     for d in range(dim):
         percentages = [1]
