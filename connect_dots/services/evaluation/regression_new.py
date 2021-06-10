@@ -2,7 +2,8 @@ import numpy as np
 
 import services.evaluation.regression
 from services.evaluation.distance import calc_distance
-from utils.plotter import simplePlot
+from utils.plotter import simplePlot, advancedPlot
+from config import gain_func
 
 
 def regression_correct(mid_points, maximum, dim, plot_for_each=True):
@@ -84,3 +85,39 @@ def mean_correct(mid_points, maximum, dim, plot_for_each=True):
         simplePlot(mean_pred_dist, pltTitle="Odleglosc predykcji od optimum (usrednienie midpointow)",
                    pltName="mean_pred_dist_global")
     return optimum
+
+
+def gain_regression_correct(mid_points, dim):
+    """
+    Predicts optimum using linear regression over the percentage of discarded points
+    The function calculates gain_function for successive points and draws a plot
+    :param mid_points: list of points
+    :param maximum: true optimum, parameter used for evaluation of the prediction
+    :param dim: number of dimensions
+    :param plot_for_each: True if draw plot for every dimension, False if draw only one main plot
+    """
+    predict_list = []  # list of predicted values for each dim, in every iteration
+
+    for d in range(dim):
+        percentages = [1]
+        predict_list.append([])
+        for i in range(2, len(mid_points)):
+            percentages.append(1 - i / (len(mid_points) - 1))
+            lin_reg = services.evaluation.regression.calc_regression([percentages], [mid_points[:i, d]], trans=True)
+            predict_list[-1].append(lin_reg.intercept_[0])
+
+    predict_list = np.array(predict_list)
+    pred_dist = []
+    best_point = predict_list[:, 0].tolist()
+    best_value = gain_func(best_point)
+    best_id = 0
+    for m in range(len(predict_list[0])):
+        point = predict_list[:, m].tolist()
+        pred_dist.append(gain_func(point))
+        if best_value < pred_dist[-1]:
+            best_value = pred_dist[-1]
+            best_point = point
+            best_id = m
+    advancedPlot(pred_dist, pltTitle="Funkcja " + str(dim) + " wymiarowa",
+                pltName="gain_func_regression", best_val=best_value, best_id=best_id)
+    return best_point

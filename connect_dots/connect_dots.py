@@ -24,9 +24,12 @@ def run(file_name):
     mid_points = calc_mid_points(p0)
     clear_dir('plots')
 
-    services.evaluation.regression_old.regression_by_gain_func(mid_points, maximum)
-    services.evaluation.regression_new.regression_correct(mid_points, maximum, dim)
-    services.evaluation.regression_new.mean_correct(mid_points, maximum, dim)
+    # services.evaluation.regression_old.regression_by_gain_func(mid_points, maximum)
+    # services.evaluation.regression_new.regression_correct(mid_points, maximum, dim)
+    # services.evaluation.regression_new.mean_correct(mid_points, maximum, dim)
+    best_point = services.evaluation.regression_new.gain_regression_correct(mid_points, dim)
+    print("best point:", best_point)
+    print("best value:", gain_func(best_point))
 
     if(p0.shape[1]) == 3:
         plot2d(p0, mid_points)

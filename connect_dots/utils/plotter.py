@@ -45,6 +45,21 @@ def simplePlot(values, legend=None, pltTitle=None, pltName='plot'):
     save_plot(pltName, plt)
 
 
+def advancedPlot(values, best_id, best_val, legend=None, pltTitle=None, pltName='plot'):
+    x_label = []
+    for i in range(len(values)):
+        x_label.append(i/len(values))
+    best_id /= len(values)
+    plt.plot(x_label, values, label=legend)
+    plt.plot(best_id, best_val, 'ro')
+    plt.xlabel("Ulamek wykorzystanych punktow")
+    plt.ylabel("Wartosc funkcji celu")
+    plt.title(pltTitle)
+    if legend:
+        plt.legend()
+    save_plot(pltName, plt)
+
+
 # for testing
 if __name__ == '__main__':
     plot2d(np.array([
