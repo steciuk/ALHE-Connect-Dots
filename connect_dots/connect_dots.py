@@ -31,6 +31,14 @@ def run(file_name):
     print("best point:", best_point)
     print("best value:", gain_func(best_point))
 
+    best_point_in_population = services.evaluation.regression_new.find_best_point_in_population(p0)
+    print("best point in population:", best_point_in_population)
+    print("best value in population:", gain_func(best_point_in_population))
+
+    best_point_ever = services.evaluation.regression_new.find_best_ever(mid_points, dim, maximum)
+    print("best point ever:", best_point_ever)
+    print("best value ever:", gain_func(best_point_ever))
+
     if(p0.shape[1]) == 3:
         plot2d(p0, mid_points)
 

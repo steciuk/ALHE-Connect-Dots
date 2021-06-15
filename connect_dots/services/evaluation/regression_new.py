@@ -92,9 +92,7 @@ def gain_regression_correct(mid_points, dim):
     Predicts optimum using linear regression over the percentage of discarded points
     The function calculates gain_function for successive points and draws a plot
     :param mid_points: list of points
-    :param maximum: true optimum, parameter used for evaluation of the prediction
     :param dim: number of dimensions
-    :param plot_for_each: True if draw plot for every dimension, False if draw only one main plot
     """
     predict_list = []  # list of predicted values for each dim, in every iteration
 
@@ -121,3 +119,52 @@ def gain_regression_correct(mid_points, dim):
     advancedPlot(pred_dist, pltTitle="Funkcja " + str(dim) + " wymiarowa",
                 pltName="gain_func_regression", best_val=best_value, best_id=best_id)
     return best_point
+
+
+def find_best_point_in_population(points):
+    """
+    Finds best point in the population
+    :param points: list of point in the population
+    """
+    best = points[0]
+    best_gain = gain_func(points[0])
+    for p in points:
+        p = p[:-1]
+        if gain_func(p) > best_gain:
+            best_gain = gain_func(p)
+            best = p
+    return best
+
+
+def find_best_ever(mid_points, dim, maximum):
+    """
+    Calculates regression for ech dimension
+    In each dimension it takes the closest value to maximum that ever was achieved by regression
+    Predicts optimum using averaging given points
+    The function evaluates the prediction and draws plots
+    :param mid_points: list of points
+    :param maximum: true optimum, parameter used for evaluation of the prediction
+    :param dim: number of dimensions
+    """
+    predict_list = []  # list of predicted values for each dim, in every iteration
+
+    for d in range(dim):
+        percentages = [1]
+        predict_list.append([])
+        for i in range(2, len(mid_points)):
+            percentages.append(1 - i / (len(mid_points) - 1))
+            lin_reg = services.evaluation.regression.calc_regression([percentages], [mid_points[:i, d]], trans=True)
+            predict_list[-1].append(lin_reg.intercept_[0])
+
+    predict_list = np.array(predict_list)
+    optimum = []
+    for d in range(dim):
+        coordinate = predict_list[d][0]
+        biggest_distance = np.abs(maximum[d] - predict_list[d][0])
+        for i in range(len(predict_list[d])):
+            if biggest_distance > np.abs(maximum[d] - predict_list[d][i]):
+                biggest_distance = np.abs(maximum[d] - predict_list[d][i])
+                coordinate = predict_list[d][i]
+        optimum.append(coordinate)
+
+    return optimum
